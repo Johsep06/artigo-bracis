@@ -1,0 +1,73 @@
+\documentclass[12pt]{article}
+
+\usepackage{tcc-template}
+\usepackage{graphicx,url}
+\graphicspath{{figs/}}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+% \usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor} % Para cores (opcional, mas fica bonito)
+\usepackage{tikz}
+\usepackage{pgf-umlsd}   % Para diagramas de sequência UML
+\usetikzlibrary{positioning, arrows.meta, calc}
+\usepackage{pgfplots}
+\usepackage[T1]{fontenc}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{siunitx}
+
+% Configuração global do estilo de código
+\lstset{
+  language=Python,                 % Linguagem (Python, Java, JSON, etc.)
+  basicstyle=\ttfamily\small,      % Fonte monoespaçada (Courier)
+  breaklines=true,                 % Quebra linhas longas automaticamente
+  frame=single,                    % Borda ao redor do código
+  numbers=left,                    % Numeração das linhas à esquerda
+  numberstyle=\tiny\color{gray},   % Estilo da numeração
+  tabsize=2,                       % Tamanho da tabulação
+  showstringspaces=false,          % Não mostra espaços sublinhados
+  captionpos=b,                    % Legenda embaixo
+  escapeinside={\%*}{*)},          % Permite LaTeX dentro do código (ex: equações)
+}
+
+\sloppy
+
+\title{Wumpus Verse: Um Protótipo de Plataforma Web para Desenvolvimento e Avaliação de Agentes no Mundo de Wumpus}
+
+\author{José R. M. Pereira\inst{1}, Williams D. E. Duarte\inst{2}, Pedro P. V. Barroso\inst{3}, Otávio N. Teixeira\inst{4}}
+
+
+\address{Campus Universitário de Tucuruí (CAMTUC) \\ Universidade Federal do Pará (UFPA)\\ Tucuruí -- PA -- Brazil
+\nextinstitute
+  Núcleo de Desenvolvimento da Amazônia (NDAE) \\ Universidade Federal do Pará (UFPA)\\ Tucuruí -- PA -- Brazil
+  \email{jose.r.maciel@outlook.com,\{pedrovbarroso087, onoura, davidduart04\}@gmail.com}
+}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+  This paper presents the prototype of a web platform designed to provide an intuitive, pleasant, and practical testing environment for intelligent agents within the Wumpus World. Aimed at teaching and research in Artificial Intelligence, the tool allows users to freely customize environments and configure different types of agents. The system enables the execution of combined experiments with performance metrics generation, while ensuring the persistence and reproduction of past simulations. The platform simplifies practical experimentation by providing a visual ecosystem that brings users closer to artificial intelligence concepts.
+\end{abstract}
+     
+\begin{resumo} 
+  Este trabalho apresenta o protótipo de uma plataforma web projetada para oferecer um ambiente de testes intuitivo, agradável e prático para agentes inteligentes no ambiente do Mundo do Wumpus. Voltada ao ensino e à pesquisa em Inteligência Artificial, a ferramenta permite que o usuário customize ambientes livremente e configure diferentes tipos de agentes. O sistema viabiliza a execução de experimentos combinados com geração de métricas de desempenho, além de garantir a persistência e a reprodução de simulações passadas. A plataforma simplifica a experimentação prática, fornecendo um ecossistema visual que aproxima usuários de conceitos de inteligência artificial.
+\end{resumo}
+
+\input{topics/1-introducao.tex}
+
+\input{topics/2-referencial-teorico.tex}
+
+\input{topics/3-metodologia.tex}
+
+\input{topics/4-analise-experimental.tex}
+
+\input{topics/5-conclusao.tex}
+
+\bibliographystyle{tcc}
+\bibliography{tcc-template}
+
+\end{document}

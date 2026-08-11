@@ -1,0 +1,65 @@
+\section{Análise Experimental}
+
+Foram realizados diversos testes funcionais para verificar os principais módulos da plataforma Wumpus Verse. Desse modo, os testes consistiram na execução de cenários de uso representativos, avaliando a correta interação entre interface, motor de jogo e mecanismos de interação disponíveis na plataforma.
+
+\subsection{Objetivo da Validação}
+
+O objetivo dos testes foi verificar o funcionamento das principais funcionalidades da plataforma, garantindo que os usuários consigam interagir com o ambiente sem falhas críticas e que os recursos implementados atendam aos requisitos definidos para o protótipo.
+
+\subsection{Metodologia de Testes}
+
+A validação da plataforma foi realizada por meio de testes funcionais manuais baseados em cenários de uso. Essa abordagem foi escolhida por ser adequada para avaliar o comportamento das funcionalidades implementadas em uma aplicação ainda em fase de prototipação.
+
+Os testes consistiram na execução de tarefas representativas das ações que um usuário realizaria ao utilizar a plataforma Wumpus Verse. Para cada cenário, foi definido um resultado esperado e verificado se o comportamento observado correspondia ao especificado.
+
+\begin{table}[ht]
+    \centering
+    \caption{Apresenta os cenários de teste.}
+    \label{tab:cenario-testes}
+    \small
+    \begin{tabular}{|p{1cm}|p{4.5cm}|p{6.5cm}|p{2cm}|}
+        \hline
+        \textbf{ID} & \textbf{Funcionalidade} & \textbf{Critério de Sucesso}  & \textbf{Resultado} \\
+        \hline
+        CT01 & Cadastro de usuário & Usuário cadastrado com sucesso & Funcional \\
+        \hline
+        CT02 & Login na plataforma & Autenticação realizada corretamente & Funcional \\
+        \hline
+        CT03 & Criação de mundo & Mundo criado e armazenado sem erros & Funcional \\
+        \hline
+        CT04 & Criação de agentes & Agente criado e salvo corretamente & Funcional \\
+        \hline
+        CT05 & Funcionamento dos agentes & Agente realiza ações coerentes no ambiente & Ajustes \hbox{Planejados} \\
+        \hline
+        CT06 & Execução de simulação & Simulação executada e resultados apresentados ao usuário & Ajustes \hbox{Planejados} \\
+        \hline
+        CT07 & Visualização do histórico & Execuções exibidas corretamente & Funcional \\
+        \hline
+        CT08 & Geração de estatísticas & Métricas apresentadas corretamente & Ajustes \hbox{Planejados} \\
+        \hline
+        CT09 & Salvamentos de resultados & Resultados armazenados com sucesso & Funcional \\
+        \hline
+        CT10 & Exportação para JSON & Arquivo JSON gerado & Funcional \\
+        \hline
+        CT11 & Importação de mapas & Mapa carregado e reconstruído corretamente & Funcional \\
+        \hline
+    \end{tabular}
+    \\{\small Fonte: Elaborado pelo autor.}
+\end{table}
+
+\subsection{Cenário Demonstrativo}
+
+Para demonstrar o fluxo de utilização da plataforma Wumpus Verse, foi considerado um cenário representativo no qual um usuário realiza o cadastro e a autenticação no sistema, cria um mundo do Wumpus e configura um agente para atuar nesse ambiente. Em seguida, o usuário executa a simulação e observa o comportamento do agente durante sua interação com o mundo criado.
+
+Após a execução, são analisadas as estatísticas geradas pela plataforma, permitindo avaliar o desempenho da simulação. Os resultados obtidos são então armazenados no sistema, possibilitando sua consulta posterior por meio do histórico de execuções. Por fim, o usuário exporta os dados do ambiente em formato JSON, realiza a importação do arquivo gerado e verifica a correta reconstrução do mapa. Esse cenário contempla as principais funcionalidades disponibilizadas pela plataforma e permitiu validar a integração entre diferentes módulos.
+
+\subsection{Discussão dos Resultados}
+
+Os testes funcionais demonstraram que a plataforma atende aos principais requisitos propostos, incluindo autenticação de usuários, gerenciamento de mundos, criação de agentes, armazenamento de execuções e importação/exportação de cenários.
+
+A funcionalidade de criação de agentes apresentou funcionamento adequado durante os testes realizados. Entretanto, os recursos de personalização ainda se encontram em processo de refinamento, uma vez que algumas opções de configuração necessitam de ajustes para oferecer maior flexibilidade e melhor experiência de uso.
+
+A execução das simulações apresentou comportamento satisfatório nos cenários avaliados. No entanto, a tomada de decisão dos agentes e a integração com serviços externos ainda dependem de aprimoramentos. Além disso, a utilização de uma API externa em sua versão gratuita pode ocasionar limitações de desempenho e eventuais inconsistências durante determinadas execuções.
+
+Observou-se também que o módulo de estatísticas e análise de resultados atualmente fornece informações básicas sobre as execuções realizadas. Como trabalho futuro, pretende-se ampliar as opções de personalização dos agentes, melhorar a robustez da integração com serviços externos, aperfeiçoar os mecanismos de tomada de decisão dos agentes e disponibilizar métricas mais detalhadas para análise de desempenho no ambiente de Wumpus.
+

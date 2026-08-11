@@ -1,0 +1,131 @@
+\section{Metodologia}
+
+A metodologia adotada para o desenvolvimento da plataforma Wumpus Verse baseou-se na separação entre frontend, backend e lógica dos agentes, seguindo uma arquitetura cliente-servidor de três camadas. Esta seção descreve os requisitos estabelecidos para o sistema, a arquitetura e tecnologias empregadas, os agentes implementados, os mecanismos de persistência de dados e a interface desenvolvida para a plataforma.
+
+\subsection{Requisitos, Arquitetura e Tecnologias}
+
+Para orientar o desenvolvimento da plataforma Wumpus Verse, foram definidos requisitos funcionais e não funcionais que garantem flexibilidade, personalização e boa experiência ao usuário, além de uma arquitetura e tecnologias que agilizem e tornem o processo eficiente.
+
+\subsubsection{Requisitos Funcionais}\label{sec:req-func}
+
+Os requisitos funcionais estabelecidos para a plataforma abrangem as principais capacidades que o sistema deve oferecer aos usuários. O primeiro requisito, denominado \textbf{RF01 - Ambientes Personalizados}, estabelece que a plataforma deve permitir a criação de grids de qualquer formato, não se restringindo apenas a configurações quadradas. O requisito \textbf{RF02 - Agentes Configuráveis} determina que o usuário deve poder definir parâmetros como objetivos e funções de avaliação para os agentes. O \textbf{RF03 - Simulação} especifica que o sistema deve ser capaz de executar agentes personalizados em ambientes salvos. O \textbf{RF04 - Persistência} estabelece a necessidade de salvamento de resultados e histórico de cada simulação realizada. O \textbf{RF05 - Análise} determina que a plataforma deve gerar relatórios com informações como pontuação, indicadores de sucesso/fracasso e o caminho percorrido pelo agente. Por fim, o \textbf{RF06 - Exportação} especifica que os dados devem poder ser exportados em formato JSON, abrangendo ambientes, agentes e execuções.
+
+\subsubsection{Requisitos Não Funcionais}
+
+Os requisitos não funcionais definidos para a plataforma contemplam aspectos de usabilidade, desempenho e disponibilidade. O sistema deve ser multiplataforma \textbf{(RNF01)}, funcionando em qualquer navegador moderno, incluindo Chrome, Firefox, Edge e Safari. Além disso, deve apresentar responsividade parcial \textbf{(RNF02)}, com adaptação a dispositivos móveis, embora com funcionalidades reduzidas para tarefas que exigem maior precisão de interação. A disponibilidade \textbf{(RNF03)} deve ser de 24 horas por dia, 7 dias por semana, durante o período de avaliação. Por fim, o tempo de resposta \textbf{(RNF04)} não deve exceder 5 segundos por requisição, garantindo uma experiência fluida para o usuário.
+
+\subsubsection{Arquitetura do Sistema}
+
+A arquitetura da plataforma Wumpus Verse foi projetada seguindo o modelo cliente-servidor de três camadas, conforme ilustrado na Figura~\ref{fig:diagrama-sistema}. A camada de frontend (I), desenvolvida com a biblioteca React, é responsável pela interface gráfica e pelo consumo da API REST. A camada de backend (II), implementada em Python com o framework FastAPI, gerencia as requisições, coordena as simulações e controla o acesso ao banco de dados. A camada de persistência (III) é composta por dois sistemas distintos: o Firebase Authentication, responsável pelo gerenciamento de login e autenticação de usuários, e o PostgreSQL, que armazena os demais dados da aplicação, incluindo ambientes, agentes e histórico de execuções. Essa separação de responsabilidades permite um desenvolvimento modular e facilita a manutenção e evolução do sistema.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Diagrama Arquitetura.png}
+    \caption{Diagrama da arquitetura do sistema.}
+    \label{fig:diagrama-sistema}
+\end{figure}
+
+\subsubsection{Tecnologias Utilizadas}
+
+A escolha das tecnologias para o desenvolvimento da plataforma considerou critérios de produtividade, integração e maturidade do ecossistema. Para o frontend, optou-se pelo React, uma biblioteca JavaScript que oferece componentização, Virtual DOM e um ecossistema maduro, fatores que agilizam o desenvolvimento de interfaces interativas. Para o backend, a combinação de Python com FastAPI foi selecionada por proporcionar agilidade no desenvolvimento e integração direta com os agentes, que também são implementados em Python. Essa escolha elimina a sobrecarga de comunicação entre linguagens e permite o reuso de código entre a API e os agentes. Para a persistência de dados, foram empregados o Firebase Authentication, que oferece infraestrutura pronta e segura para gerenciamento de login, e o PostgreSQL, que garante consistência transacional e integridade referencial para o armazenamento dos dados da aplicação.
+
+\subsection{Agentes}
+
+A plataforma Wumpus Verse disponibiliza três tipos de agentes com diferentes estratégias de decisão, todos projetados para maximizar a pontuação final, seja coletando o ouro, eliminando o Wumpus ou retornando à saída. A implementação desses agentes permite que os usuários comparem diferentes abordagens para o mesmo problema, facilitando a compreensão das vantagens e limitações de cada estratégia.
+
+O \textbf{Agente Reativo Aleatório} implementa uma abordagem simples baseada em regras. A cada passo, o agente recebe as percepções da sala atual, que podem incluir fedor (indicando proximidade do Wumpus), brisa (indicando proximidade de poços) e brilho (indicando a presença de ouro). Se detecta ouro, o agente o coleta imediatamente. Se detecta fedor, existe uma probabilidade de 10\% de o agente atirar em uma direção aleatória. Caso contrário, o agente move-se aleatoriamente entre as direções possíveis. Este agente ignora completamente a percepção de brisa, o que o torna vulnerável a cair em poços, mas serve como um baseline para comparação com estratégias mais sofisticadas.
+
+O \textbf{Agente Baseado em Modelo} mantém um estado interno, ou crença, que é atualizado continuamente com base nas percepções recebidas. Salas consideradas seguras são exploradas, enquanto salas com indícios de perigo (fedor ou brisa) são evitadas. Este agente utiliza o algoritmo A* para planejar rotas ótimas entre sua posição atual e os destinos desejados. O agente pode ser configurado com quatro perfis de comportamento distintos, que determinam sua estratégia de priorização:
+
+\begin{itemize}
+    \item \textbf{Perfil Assassino:} prioriza a localização e eliminação do Wumpus, mesmo que isso implique assumir riscos maiores.
+    \item \textbf{Perfil Garimpeiro}: prioriza a coleta do ouro como objetivo principal, evitando confrontos desnecessários.
+    \item \textbf{Perfil Explorador}: continua explorando o ambiente mesmo após cumprir seu objetivo inicial, buscando mapear completamente o cenário.
+    \item \textbf{Perfil Corajoso}: está disposto a arriscar entrar em salas consideradas perigosas, confiando em sua capacidade de reagir a imprevistos.
+\end{itemize}
+
+O \textbf{Agente Evolutivo} utiliza um algoritmo genético para otimizar uma sequência de ações, representada como um cromossomo. O usuário pode definir parâmetros como tamanho da população, número de gerações, taxas de cruzamento e mutação, além de uma função fitness personalizada. A função fitness é uma combinação linear de métricas como número de passos, sucesso na coleta do ouro e sobrevivência. Cada indivíduo da população é executado no ambiente e sua pontuação é calculada pela função fitness definida. Os melhores indivíduos são selecionados para reprodução, recombinados e mutados a cada geração, seguindo os princípios da evolução darwiniana. Ao final do processo evolutivo, o melhor cromossomo encontrado é utilizado como política de ação do agente.
+
+\subsection{Armazenamento e Backend}
+
+O backend da plataforma Wumpus Verse tem a responsabilidade de expor a API REST e gerenciar a persistência dos dados, garantindo que todas as informações geradas pelos usuários sejam armazenadas de forma segura e consistente.
+
+\subsubsection{Estrutura da API}
+
+Desenvolvida em Python com o framework FastAPI, a API disponibiliza endpoints que cobrem todas as funcionalidades da plataforma. Os principais endpoints estão listados na Tabela~\ref{tab:endpoints-api}, que apresenta as rotas, métodos HTTP e descrições das operações disponíveis.
+
+\begin{table}[ht]
+    \centering
+    \small
+    \begin{tabular}{|p{5.5cm}|p{2cm}|p{6.5cm}|}
+        \hline
+        \textbf{Rota} & \textbf{Método} & \textbf{Descrição} \\
+        \hline
+        \texttt{/environment/list-user}, \texttt{/environment/user} & GET, POST & Lista ou cria ambientes do usuário \\
+        \hline
+        \texttt{/environment/execution} & POST & Executa um agente em um ambiente (recebe IDs) \\
+        \hline
+        \texttt{/auth/register}, \texttt{/auth/login} & POST & Registro/login, retorna token JWT \\
+        \hline
+        \texttt{/agents/user}, \texttt{/agents/agents} & POST, GET & Cria ou lista agentes personalizado \\
+        \hline
+        \texttt{/execution/user}, \texttt{/execution/list-user} & POST, GET & Salva ou lista execuções \\
+        \hline
+        \texttt{/execution/statics} & POST & Analisa agentes em um ambiente (estatísticas) \\
+        \hline
+    \end{tabular}
+    \caption{Endpoints da API para gerenciamento de ambientes, agentes e execuções.}
+    \label{tab:endpoints-api}
+\end{table}
+
+A comunicação entre cliente e servidor utiliza JSON como formato de dados, e a maioria das requisições é autenticada via token JWT integrado ao Firebase Authentication, garantindo que apenas usuários autorizados possam acessar e modificar seus dados.
+
+\subsubsection{Integração com os Agentes}
+
+Como os agentes também são implementados em Python, o backend os importa diretamente como módulos, eliminando a necessidade de comunicação entre linguagens diferentes. A simulação ocorre em um ambiente controlado (classe Environment), que recebe o agente e o grid, executa passo a passo e coleta métricas como número de passos, ouro coletado, Wumpus morto e sobrevivência. Ao final da simulação, o sistema calcula a pontuação final do agente de acordo com as regras estabelecidas. Esse desenho permite a reciclagem de código entre a API e os agentes, reduzindo a complexidade e os possíveis pontos de falha.
+
+\subsubsection{Persistência de Dados}
+
+A plataforma utiliza dois sistemas de armazenamento complementares para gerenciar diferentes aspectos dos dados. O \textbf{Firebase Authentication} é responsável pelo gerenciamento de cadastro, login e redefinição de senhas de usuários, fornecendo uma infraestrutura pronta e segura que elimina a necessidade de implementar esses mecanismos do zero. O \textbf{PostgreSQL} é utilizado para armazenar os dados específicos da aplicação, incluindo ambientes (grid, posições), agentes (parâmetros, tipo, função fitness) e execuções (histórico, ouros coletados, Wumpus mortos, pontuação final). A escolha do PostgreSQL garante consistência transacional e integridade referencial, características essenciais para um sistema que lida com dados complexos e inter-relacionados.
+
+\subsection{Frontend}
+
+frontend da plataforma foi desenvolvido utilizando a biblioteca JavaScript React, permitindo a construção de uma interface web dinâmica e responsiva. A arquitetura da interface foi organizada em diferentes módulos, cada um responsável por uma etapa do fluxo de utilização do sistema, desde o acesso inicial até a execução e análise dos experimentos. Esta seção descreve os principais módulos da interface, relacionando cada funcionalidade aos requisitos funcionais estabelecidos na Seção~\ref{sec:req-func}.
+
+A \textbf{tela de apresentação} constitui a página inicial da plataforma, fornecendo acesso às principais funcionalidades disponíveis, atendendo ao requisito de disponibilidade e acesso intuitivo ao sistema. Complementarmente, a seção \textbf{Saiba Mais} reúne informações sobre o projeto, sua motivação, a equipe de desenvolvimento e uma breve contextualização sobre o problema do Mundo do Wumpus.
+
+O sistema possui um módulo de \textbf{autenticação} composto pelas telas de login e registro, responsáveis pelo gerenciamento do acesso dos usuários. O cadastro inclui verificação de e-mail, e apenas usuários autenticados podem acessar as funcionalidades de gerenciamento e execução de experimentos. Este módulo atende indiretamente aos requisitos de persistência (RF04) ao garantir que os dados sejam associados a usuários específicos.
+
+Para a criação e administração dos cenários, a plataforma disponibiliza as telas \textbf{Mundos} e \textbf{Editor de Mundos}, atendendo ao requisito RF01 (Ambientes Personalizados). A primeira apresenta a lista de ambientes previamente criados pelo usuário, permitindo sua visualização, edição, exclusão, importação e exportação. O editor, por sua vez, possibilita a construção de mundos bidimensionais personalizados, nos quais podem ser posicionadas as entidades do jogo, como Wumpus, poços e ouro. Embora os cenários possam assumir diferentes formatos, sua estrutura é baseada em uma malha de salas quadradas interconectadas. A Figura~\ref{fig:telas-exemplos} apresenta exemplos dessas interfaces.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Telas/Inicial.png}
+    \caption{Exemplo de telas da plataforma.}
+    \label{fig:telas-exemplos}
+\end{figure}
+
+A configuração dos agentes é realizada por meio da tela \textbf{Agentes}, que reúne os modelos personalizados criados pelo usuário, atendendo ao requisito RF02 (Agentes Configuráveis). A plataforma oferece suporte à criação e edição de agentes lógicos e evolutivos, permitindo a definição de parâmetros específicos de comportamento e estratégias de tomada de decisão. Para agentes lógicos, o usuário pode selecionar o perfil de comportamento (assassino, garimpeiro, explorador ou corajoso) e ajustar parâmetros como a prioridade dada a cada objetivo. Para agentes evolutivos, o usuário pode definir o tamanho da população, número de gerações, taxas de cruzamento e mutação, além de uma função fitness personalizada composta por uma combinação linear de métricas como passos, sucesso e sobrevivência. A interface de configuração inclui campos para cada um desses parâmetros, permitindo que o usuário experimente diferentes combinações e observe seus efeitos no comportamento do agente.
+
+O gerenciamento dos resultados experimentais é realizado por meio das telas \textbf{Histórico} e \textbf{Estatísticas}, atendendo aos requisitos RF04 (Persistência) e RF05 (Análise). O módulo de histórico armazena as execuções associadas aos mundos e agentes utilizados, permitindo sua recuperação e reconstrução para análises posteriores. Já o módulo de estatísticas consolida informações provenientes das execuções salvas, possibilitando a comparação do desempenho entre diferentes agentes em um mesmo cenário por meio de métricas como pontuação média, número médio de passos e quantidade média de disparos realizados.
+
+A configuração de uma nova simulação é realizada na tela \textbf{Nova Partida}, onde são definidos o mundo de execução, o agente a ser utilizado (personalizado ou disponibilizado pela própria plataforma) e a posição inicial do agente no ambiente, atendendo ao requisito RF03 (Simulação). Após essa etapa, a execução ocorre na tela \textbf{Execução}, na qual o comportamento do agente é reproduzido graficamente a partir do roteiro gerado pelo backend. A interface disponibiliza controles para navegação entre os passos da simulação, repetição da execução, alteração de parâmetros básicos e visualização detalhada das ações realizadas. A Figura~\ref{fig:tela-execucao} apresenta a interface de execução da plataforma.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Telas/execução.png}
+    \caption{Interface de execução da plataforma Wumpus Verse durante uma simulação.}
+    \label{fig:tela-execucao}
+\end{figure}
+
+lém disso, o usuário pode armazenar a execução em sua conta para futuras análises, bem como exportar ou importar partidas por meio de arquivos, atendendo ao requisito RF06 (Exportação). A funcionalidade de exportação permite que os dados sejam salvos em formato JSON, enquanto a importação possibilita a reconstrução de ambientes e execuções previamente exportados.
+
+Conforme mencionado anteriormente, a plataforma foi desenvolvida seguindo princípios de responsividade, permitindo seu acesso também por meio de dispositivos móveis. Entretanto, determinadas funcionalidades, como a criação e edição de mundos, permanecem disponíveis apenas em ambientes com teclado e mouse, uma vez que a definição da estrutura do cenário depende de interações de precisão baseadas no uso simultâneo do cursor e de comandos do teclado. Dessa forma, a adaptação para dispositivos móveis prioriza a consulta e a execução de experimentos, preservando a usabilidade das funcionalidades que demandam maior nível de interação. A Figura~\ref{fig:tela-mobile} apresenta a interface da plataforma em um dispositivo móvel, evidenciando a adaptação do layout para telas de menor dimensão.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Telas/Listagem-de-ambientes.png}
+    \caption{Interface responsiva da plataforma Wumpus Verse em dispositivo
+móvel.}
+    \label{fig:tela-mobile}
+\end{figure}
