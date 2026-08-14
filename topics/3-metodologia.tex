@@ -10,8 +10,6 @@ Para orientar o desenvolvimento da plataforma Wumpus Verse, foram definidos requ
 
 Os requisitos funcionais estabelecidos para a plataforma abrangem as principais capacidades que o sistema deve oferecer aos usuários. O primeiro requisito, denominado \textbf{RF01 - Ambientes Personalizados}, estabelece que a plataforma deve permitir a criação de grids de qualquer formato, não se restringindo apenas a configurações quadradas. O requisito \textbf{RF02 - Agentes Configuráveis} determina que o usuário deve poder definir parâmetros como objetivos e funções de avaliação para os agentes. O \textbf{RF03 - Simulação} especifica que o sistema deve ser capaz de executar agentes personalizados em ambientes salvos. O \textbf{RF04 - Persistência} estabelece a necessidade de salvamento de resultados e histórico de cada simulação realizada. O \textbf{RF05 - Análise} determina que a plataforma deve gerar relatórios com informações como pontuação, indicadores de sucesso/fracasso e o caminho percorrido pelo agente. Por fim, o \textbf{RF06 - Exportação} especifica que os dados devem poder ser exportados em formato JSON, abrangendo ambientes, agentes e execuções.
 
-% \subsubsection{Requisitos Não Funcionais}
-
 Os requisitos não funcionais definidos para a plataforma contemplam aspectos de usabilidade, desempenho e disponibilidade. O sistema deve ser multiplataforma \textbf{(RNF01)}, funcionando em qualquer navegador moderno, incluindo Chrome, Firefox, Edge e Safari. Além disso, deve apresentar responsividade parcial \textbf{(RNF02)}, com adaptação a dispositivos móveis, embora com funcionalidades reduzidas para tarefas que exigem maior precisão de interação. A disponibilidade \textbf{(RNF03)} deve ser de 24 horas por dia, 7 dias por semana, durante o período de avaliação. Por fim, o tempo de resposta \textbf{(RNF04)} não deve exceder 5 segundos por requisição, garantindo uma experiência fluida para o usuário.
 
 \subsubsection{Arquitetura e Tecnologias Utilizadas}
@@ -22,7 +20,7 @@ A camada de frontend (I), desenvolvida com a biblioteca React, é responsável p
 
 A camada de backend (II), implementada em Python com o framework FastAPI, gerencia as requisições, coordena as simulações e controla o acesso ao banco de dados. A combinação de Python com FastAPI foi escolhida por proporcionar agilidade no desenvolvimento e integração direta com os agentes (que também são implementados em Python) eliminando a sobrecarga de comunicação entre linguagens e permitindo o reuso de código entre a API e os agentes.
 
-A camada de persistência (III) é composta por dois sistemas distintos: o Firebase Authentication, responsável pelo gerenciamento de login e autenticação de usuários, oferecendo infraestrutura pronta e segura; e o PostgreSQL, que armazena os demais dados da aplicação, incluindo ambientes, agentes e histórico de execuções, garantindo consistência transacional e integridade referencial.
+A camada de persistência (III) é composta por dois sistemas distintos: o Firebase Authentication e o PostgreSQL, que juntos lidam com o sistema de login e dados da aplicação.
 
 Essa separação de responsabilidades, aliada à escolha tecnológica adequada, permite um desenvolvimento modular e facilita a manutenção e evolução do sistema.
 
