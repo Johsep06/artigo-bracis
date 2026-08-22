@@ -2,27 +2,15 @@
 
 A metodologia adotada para o desenvolvimento da plataforma Wumpus Verse baseou-se na separação entre frontend, backend e lógica dos agentes, seguindo uma arquitetura cliente-servidor de três camadas. Esta seção descreve os requisitos estabelecidos para o sistema, a arquitetura e tecnologias empregadas, os agentes implementados, os mecanismos de persistência de dados e a interface desenvolvida para a plataforma.
 
-\subsection{Requisitos, Arquitetura e Tecnologias}
+\subsection{Requisitos, Arquitetura e Tecnologias} \label{sec:req-arq-tec}
 
 Para orientar o desenvolvimento da plataforma Wumpus Verse, foram definidos requisitos funcionais e não funcionais que garantem flexibilidade, personalização e boa experiência ao usuário, além de uma arquitetura e tecnologias que agilizem e tornem o processo eficiente.
 
-\subsubsection{Requisitos}\label{sec:req-func}
+Os requisitos funcionais estabelecidos para a plataforma abrangem as principais capacidades que o sistema deve oferecer aos usuários. O primeiro deles, denominado \textbf{RF01 - Ambientes Personalizados}, estabelece que a plataforma deve permitir a criação de grids de qualquer formato, não se restringindo apenas a configurações quadradas. O requisito \textbf{RF02 - Agentes Configuráveis} determina que o usuário deve poder definir parâmetros como objetivos e funções de avaliação para os agentes. O \textbf{RF03 - Simulação} especifica que o sistema deve ser capaz de executar agentes personalizados em ambientes salvos. O \textbf{RF04 - Persistência} estabelece a necessidade de salvamento de resultados e histórico de cada simulação realizada. O \textbf{RF05 - Análise} determina que a plataforma deve gerar relatórios com informações como pontuação, indicadores de sucesso/fracasso e o caminho percorrido pelo agente. Por fim, o \textbf{RF06 - Exportação} especifica que os dados devem poder ser exportados em formato JSON, abrangendo ambientes, agentes e execuções.
 
-Os requisitos funcionais estabelecidos para a plataforma abrangem as principais capacidades que o sistema deve oferecer aos usuários. O primeiro requisito, denominado \textbf{RF01 - Ambientes Personalizados}, estabelece que a plataforma deve permitir a criação de grids de qualquer formato, não se restringindo apenas a configurações quadradas. O requisito \textbf{RF02 - Agentes Configuráveis} determina que o usuário deve poder definir parâmetros como objetivos e funções de avaliação para os agentes. O \textbf{RF03 - Simulação} especifica que o sistema deve ser capaz de executar agentes personalizados em ambientes salvos. O \textbf{RF04 - Persistência} estabelece a necessidade de salvamento de resultados e histórico de cada simulação realizada. O \textbf{RF05 - Análise} determina que a plataforma deve gerar relatórios com informações como pontuação, indicadores de sucesso/fracasso e o caminho percorrido pelo agente. Por fim, o \textbf{RF06 - Exportação} especifica que os dados devem poder ser exportados em formato JSON, abrangendo ambientes, agentes e execuções.
+Complementarmente, foram definidos requisitos não funcionais que contemplam aspectos de usabilidade, desempenho e disponibilidade. O sistema deve ser multiplataforma \textbf{(RNF01)}, funcionando em qualquer navegador moderno, incluindo Chrome, Firefox, Edge e Safari. Além disso, deve apresentar responsividade parcial \textbf{(RNF02)}, com adaptação a dispositivos móveis, embora com funcionalidades reduzidas para tarefas que exigem maior precisão de interação. A disponibilidade \textbf{(RNF03)} deve ser de 24 horas por dia, 7 dias por semana, durante o período de avaliação. Por fim, o tempo de resposta \textbf{(RNF04)} não deve exceder 5 segundos por requisição, garantindo uma experiência fluida para o usuário.
 
-Os requisitos não funcionais definidos para a plataforma contemplam aspectos de usabilidade, desempenho e disponibilidade. O sistema deve ser multiplataforma \textbf{(RNF01)}, funcionando em qualquer navegador moderno, incluindo Chrome, Firefox, Edge e Safari. Além disso, deve apresentar responsividade parcial \textbf{(RNF02)}, com adaptação a dispositivos móveis, embora com funcionalidades reduzidas para tarefas que exigem maior precisão de interação. A disponibilidade \textbf{(RNF03)} deve ser de 24 horas por dia, 7 dias por semana, durante o período de avaliação. Por fim, o tempo de resposta \textbf{(RNF04)} não deve exceder 5 segundos por requisição, garantindo uma experiência fluida para o usuário.
-
-\subsubsection{Arquitetura e Tecnologias Utilizadas}
-
-A arquitetura da plataforma Wumpus Verse foi projetada seguindo o modelo cliente-servidor de três camadas, conforme ilustrado na Figura~\ref{fig:diagrama-sistema}. A escolha das tecnologias para cada camada considerou critérios de produtividade, integração e maturidade do ecossistema.
-
-A camada de frontend (I), desenvolvida com a biblioteca React, é responsável pela interface gráfica e pelo consumo da API REST. O React foi selecionado por oferecer componentização, Virtual DOM e um ecossistema maduro, fatores que agilizam o desenvolvimento de interfaces interativas.
-
-A camada de backend (II), implementada em Python com o framework FastAPI, gerencia as requisições, coordena as simulações e controla o acesso ao banco de dados. A combinação de Python com FastAPI foi escolhida por proporcionar agilidade no desenvolvimento e integração direta com os agentes (que também são implementados em Python) eliminando a sobrecarga de comunicação entre linguagens e permitindo o reuso de código entre a API e os agentes.
-
-A camada de persistência (III) é composta por dois sistemas distintos: o Firebase Authentication e o PostgreSQL, que juntos lidam com o sistema de login e dados da aplicação.
-
-Essa separação de responsabilidades, aliada à escolha tecnológica adequada, permite um desenvolvimento modular e facilita a manutenção e evolução do sistema.
+Com base nesses requisitos, a arquitetura da plataforma foi projetada seguindo o modelo cliente-servidor de três camadas, conforme ilustrado na Figura~\ref{fig:diagrama-sistema}. A escolha das tecnologias para cada camada considerou critérios de produtividade, integração e maturidade do ecossistema. A camada de frontend (I), desenvolvida com a biblioteca React, é responsável pela interface gráfica e pelo consumo da API REST. O React foi selecionado por oferecer componentização, Virtual DOM e um ecossistema maduro, fatores que agilizam o desenvolvimento de interfaces interativas. A camada de backend (II), implementada em Python com o framework FastAPI, gerencia as requisições, coordena as simulações e controla o acesso ao banco de dados. A combinação de Python com FastAPI foi escolhida por proporcionar agilidade no desenvolvimento e integração direta com os agentes (que também são implementados em Python) eliminando a sobrecarga de comunicação entre linguagens e permitindo o reuso de código entre a API e os agentes. Por fim, a camada de persistência (III) é composta por dois sistemas distintos: o Firebase Authentication, responsável pelo gerenciamento de usuários, e o PostgreSQL, que armazena os dados específicos da aplicação. Essa separação de responsabilidades, aliada à escolha tecnológica adequada, permite um desenvolvimento modular e facilita a manutenção e evolução do sistema.
 
 \begin{figure}[ht]
     \centering
@@ -50,18 +38,16 @@ O \textbf{Agente Evolutivo} utiliza um algoritmo genético para otimizar uma seq
 
 \subsection{Armazenamento e Backend}
 
-O backend da plataforma Wumpus Verse tem a responsabilidade de expor a API REST e gerenciar a persistência dos dados, garantindo que todas as informações geradas pelos usuários sejam armazenadas de forma segura e consistente.
+O backend da plataforma Wumpus Verse é responsável por expor a API REST e gerenciar a persistência dos dados, assegurando que todas as informações geradas pelos usuários sejam armazenadas de forma segura e consistente. Para isso, sua arquitetura integra três aspectos fundamentais: a estrutura da API, a integração direta com os agentes e os mecanismos de persistência.
 
-\subsubsection{Estrutura da API}
-
-Desenvolvida em Python com o framework FastAPI, a API disponibiliza endpoints que cobrem todas as funcionalidades da plataforma. Os principais endpoints estão listados na Tabela~\ref{tab:endpoints-api}, que apresenta as rotas, métodos HTTP e descrições das operações disponíveis.
+Desenvolvida em Python com o framework FastAPI, a API disponibiliza endpoints que cobrem todas as funcionalidades da plataforma. Os principais endpoints estão listados na Tabela~\ref{tab:endpoints-api}, que apresenta as rotas, métodos HTTP e descrições das operações disponíveis. A comunicação entre cliente e servidor utiliza JSON como formato de dados, e a maioria das requisições é autenticada via token JWT integrado ao Firebase Authentication, garantindo que apenas usuários autorizados possam acessar e modificar seus dados.
 
 \begin{table}[ht]
     \centering
     \small
     \begin{tabular}{|p{5.5cm}|p{2cm}|p{6.5cm}|}
         \hline
-        \textbf{Rota} & \textbf{Método} & \textbf{Descrição} \\
+        \underline{\textbf{Rota}} & \underline{\textbf{Método}} & \underline{\textbf{Descrição}} \\
         \hline
         \texttt{/environment/list-user}, \texttt{/environment/user} & GET, POST & Lista ou cria ambientes do usuário \\
         \hline
@@ -80,19 +66,13 @@ Desenvolvida em Python com o framework FastAPI, a API disponibiliza endpoints qu
     \label{tab:endpoints-api}
 \end{table}
 
-A comunicação entre cliente e servidor utiliza JSON como formato de dados, e a maioria das requisições é autenticada via token JWT integrado ao Firebase Authentication, garantindo que apenas usuários autorizados possam acessar e modificar seus dados.
+Complementando a estrutura da API, a integração com os agentes foi projetada para otimizar o desempenho e a confiabilidade do sistema. Como os agentes também são implementados em Python, o backend os importa diretamente como módulos, eliminando a sobrecarga e a complexidade da comunicação entre linguagens diferentes. A simulação ocorre em um ambiente controlado (classe \texttt{Environment}), que recebe o agente e o grid, executa as ações passo a passo e coleta métricas como número de passos, ouro coletado, Wumpus morto e sobrevivência. Ao final da simulação, o sistema calcula a pontuação final do agente de acordo com as regras estabelecidas. Esse desenho permite a reciclagem de código entre a API e os agentes, reduzindo significativamente a complexidade e os possíveis pontos de falha.
 
-\subsubsection{Integração com os Agentes}
-
-Como os agentes também são implementados em Python, o backend os importa diretamente como módulos, eliminando a necessidade de comunicação entre linguagens diferentes. A simulação ocorre em um ambiente controlado (classe Environment), que recebe o agente e o grid, executa passo a passo e coleta métricas como número de passos, ouro coletado, Wumpus morto e sobrevivência. Ao final da simulação, o sistema calcula a pontuação final do agente de acordo com as regras estabelecidas. Esse desenho permite a reciclagem de código entre a API e os agentes, reduzindo a complexidade e os possíveis pontos de falha.
-
-\subsubsection{Persistência de Dados}
-
-A plataforma utiliza dois sistemas de armazenamento complementares para gerenciar diferentes aspectos dos dados. O \textbf{Firebase Authentication} é responsável pelo gerenciamento de cadastro, login e redefinição de senhas de usuários, fornecendo uma infraestrutura pronta e segura que elimina a necessidade de implementar esses mecanismos do zero. O \textbf{PostgreSQL} é utilizado para armazenar os dados específicos da aplicação, incluindo ambientes (grid, posições), agentes (parâmetros, tipo, função fitness) e execuções (histórico, ouros coletados, Wumpus mortos, pontuação final). A escolha do PostgreSQL garante consistência transacional e integridade referencial, características essenciais para um sistema que lida com dados complexos e inter-relacionados.
+Por fim, no que tange à persistência de dados, a plataforma adota dois sistemas de armazenamento complementares para gerenciar diferentes aspectos das informações. O \textbf{Firebase Authentication} é responsável pelo gerenciamento de cadastro, login e redefinição de senhas de usuários, fornecendo uma infraestrutura pronta e segura que elimina a necessidade de implementar esses mecanismos do zero. O \textbf{PostgreSQL}, por sua vez, é utilizado para armazenar os dados específicos da aplicação, incluindo ambientes (grid, posições), agentes (parâmetros, tipo, função fitness) e execuções (histórico, ouros coletados, Wumpus mortos, pontuação final). A escolha do PostgreSQL garante consistência transacional e integridade referencial, características essenciais para um sistema que lida com dados complexos e inter-relacionados. Dessa forma, a combinação dessas duas ferramentas proporciona uma base robusta e escalável para todas as operações de gerenciamento de usuários e experimentos realizados na plataforma.
 
 \subsection{Frontend}
 
-frontend da plataforma foi desenvolvido utilizando a biblioteca JavaScript React, permitindo a construção de uma interface web dinâmica e responsiva. A arquitetura da interface foi organizada em diferentes módulos, cada um responsável por uma etapa do fluxo de utilização do sistema, desde o acesso inicial até a execução e análise dos experimentos. Esta seção descreve os principais módulos da interface, relacionando cada funcionalidade aos requisitos funcionais estabelecidos na Seção~\ref{sec:req-func}.
+frontend da plataforma foi desenvolvido utilizando a biblioteca JavaScript React, permitindo a construção de uma interface web dinâmica e responsiva. A arquitetura da interface foi organizada em diferentes módulos, cada um responsável por uma etapa do fluxo de utilização do sistema, desde o acesso inicial até a execução e análise dos experimentos. Esta seção descreve os principais módulos da interface, relacionando cada funcionalidade aos requisitos funcionais estabelecidos na Seção~\ref{sec:req-arq-tec}.
 
 A \textbf{tela de apresentação} constitui a página inicial da plataforma, fornecendo acesso às principais funcionalidades disponíveis, atendendo ao requisito de disponibilidade e acesso intuitivo ao sistema. Complementarmente, a seção \textbf{Saiba Mais} reúne informações sobre o projeto, sua motivação, a equipe de desenvolvimento e uma breve contextualização sobre o problema do Mundo do Wumpus.
 
@@ -102,7 +82,7 @@ Para a criação e administração dos cenários, a plataforma disponibiliza as 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.6\textwidth]{Telas/Inicial.png}
+    \includegraphics[width=0.6\textwidth]{Telas/telas-plataforma.png}
     \caption{Exemplo de telas da plataforma.}
     \label{fig:telas-exemplos}
 \end{figure}
@@ -115,7 +95,7 @@ A configuração de uma nova simulação é realizada na tela \textbf{Nova Parti
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.6\textwidth]{Telas/execução.png}
+    \includegraphics[width=0.6\textwidth]{Telas/tela-execução.png}
     \caption{Interface de execução da plataforma Wumpus Verse durante uma simulação.}
     \label{fig:tela-execucao}
 \end{figure}
@@ -126,7 +106,7 @@ Conforme mencionado anteriormente, a plataforma foi desenvolvida seguindo princ�
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.6\textwidth]{Telas/Listagem-de-ambientes.png}
+    \includegraphics[width=0.6\textwidth]{Telas/telas-mobile.png}
     \caption{Interface responsiva da plataforma Wumpus Verse em dispositivo
 móvel.}
     \label{fig:tela-mobile}
