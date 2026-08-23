@@ -1,65 +1,57 @@
 \section{Análise Experimental}
 
-A avaliação experimental da plataforma Wumpus Verse foi conduzida com o propósito de verificar o correto funcionamento de suas principais funcionalidades e a integração entre os módulos que compõem o sistema. Para isso, foram executados testes funcionais baseados em cenários representativos das ações que um usuário realiza durante a utilização da plataforma, abrangendo desde o cadastro e a autenticação até a criação de mundos e agentes, a execução de simulações, o armazenamento de resultados e as operações de importação e exportação de cenários. Dessa forma, buscou‑se assegurar que o comportamento observado estivesse em conformidade com os requisitos definidos para o protótipo.
+A avaliação da plataforma Wumpus Verse foi conduzida em duas frentes: (i) verificação do funcionamento dos módulos e integração (testes funcionais) e (ii) análise quantitativa do desempenho dos agentes implementados, com o objetivo de demonstrar a utilidade da ferramenta para experimentação comparativa em pesquisa.
 
-\subsection{Objetivo da Validação}
+Os testes funcionais, executados manualmente com base em cenários de uso, cobriram as operações essenciais da plataforma: cadastro e autenticação, criação e edição de mundos, configuração de agentes, execução de simulações, persistência de resultados e importação/exportação de dados. Todas essas funcionalidades apresentaram comportamento esperado, atestando a maturidade do protótipo para uso em experimentos controlados. Os detalhes dos casos de teste estão disponíveis no repositório do projeto.
 
-A validação teve como objetivo principal verificar o funcionamento das funcionalidades disponibilizadas pela plataforma, avaliando sua capacidade de executar corretamente as operações previstas e de integrar os diferentes módulos do sistema. Além disso, procurou‑se identificar eventuais limitações ou aspectos que ainda necessitassem de ajustes, garantindo que os usuários pudessem realizar as tarefas essenciais do fluxo de utilização sem a ocorrência de falhas críticas. Para tanto, foram considerados aspectos relacionados à autenticação, ao gerenciamento de mundos, à criação e configuração de agentes, à execução e ao armazenamento de simulações, à geração de estatísticas e à manipulação de dados por meio dos recursos de importação e exportação.
+\subsection{Análise Quantitativa de Desempenho dos Agentes}
 
-\subsection{Metodologia de Testes}
+Para avaliar a capacidade da plataforma como ambiente de \textit{benchmarking}, foram conduzidos experimentos com cinco agentes de diferentes estratégias em um cenário padronizado. O ambiente utilizado, ilustrado na Figura~\ref{fig:tela-execucao}, consiste em um grid $8 \times 8$ com 3 Wumpus, 3 poços e 2 ouros, dispostos de forma a criar um nível mediano de complexidade. A sala $(0,0)$, destacada em branco, foi definida como ponto inicial para todas as simulações.
 
-A validação da plataforma foi realizada por meio de testes funcionais manuais baseados em cenários de uso. Essa abordagem foi adotada por ser adequada para avaliar o comportamento das funcionalidades implementadas em uma aplicação que ainda se encontra em fase de prototipação, permitindo verificar diretamente os resultados obtidos a partir das ações executadas pelo usuário. Para cada cenário de teste, foi definida uma funcionalidade alvo, um critério de sucesso correspondente ao comportamento esperado e o resultado observado durante a execução. Os cenários foram elaborados de modo a contemplar as principais etapas de utilização da plataforma, abrangendo o gerenciamento de usuários, ambientes e agentes, bem como a execução, a consulta e a manipulação dos resultados das simulações.
+Foram testados cinco agentes, abrangendo diferentes níveis de sofisticação:
 
-A Tabela 2 apresenta os cenários utilizados durante a validação, juntamente com os respectivos critérios de sucesso e resultados observados.
+\begin{itemize}
+    \item \textbf{Reativo Aleatório}: agente sem memória, com decisões aleatórias baseadas em percepções.
+    \item \textbf{Baseado em Modelo (padrão)}: com todos os perfis ativados (Garimpeiro, Caçador, Explorador, Corajoso).
+    \item \textbf{Garimpeiro}: prioriza a coleta de ouro.
+    \item \textbf{Caçador}: prioriza a eliminação do Wumpus.
+    \item \textbf{Evolutivo}: algoritmo genético (população 100, 1000 gerações, crossover 50\%, mutação 5\%) com função \textit{fitness} linear combinando passos, coleta de ouro e sobrevivência.
+\end{itemize}
+
+Cada agente foi executado 30 vezes no mesmo ambiente. A Figura~\ref{fig:graf-pontos} apresenta a evolução das pontuações ao longo das execuções, e a Tabela~\ref{tab:estatisticas} resume as estatísticas descritivas.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{gráfico pontuação.png}
+    \caption{Evolução das pontuações por execução para cada agente.}
+    \label{fig:graf-pontos}
+\end{figure}
 
 \begin{table}[ht]
     \centering
-    \caption{Apresenta os cenários de teste.}
-    \label{tab:cenario-testes}
-    \small
-    \begin{tabular}{|p{1cm}|p{4.5cm}|p{6.5cm}|p{2cm}|}
-        \hline
-        \textbf{ID} & \textbf{Funcionalidade} & \textbf{Critério de Sucesso}  & \textbf{Resultado} \\
-        \hline
-        CT01 & Cadastro de usuário & Usuário cadastrado com sucesso & Funcional \\
-        \hline
-        CT02 & Login na plataforma & Autenticação realizada corretamente & Funcional \\
-        \hline
-        CT03 & Criação de mundo & Mundo criado e armazenado sem erros & Funcional \\
-        \hline
-        CT04 & Criação de agentes & Agente criado e salvo corretamente & Funcional \\
-        \hline
-        CT05 & Funcionamento dos agentes & Agente realiza ações coerentes no ambiente & Ajustes \hbox{Planejados} \\
-        \hline
-        CT06 & Execução de simulação & Simulação executada e resultados apresentados ao usuário & Ajustes \hbox{Planejados} \\
-        \hline
-        CT07 & Visualização do histórico & Execuções exibidas corretamente & Funcional \\
-        \hline
-        CT08 & Geração de estatísticas & Métricas apresentadas corretamente & Ajustes \hbox{Planejados} \\
-        \hline
-        CT09 & Salvamentos de resultados & Resultados armazenados com sucesso & Funcional \\
-        \hline
-        CT10 & Exportação para JSON & Arquivo JSON gerado & Funcional \\
-        \hline
-        CT11 & Importação de mapas & Mapa carregado e reconstruído corretamente & Funcional \\
-        \hline
+    \begin{tabular}{lrrrrr}
+        \toprule
+        \textbf{Agente} & \textbf{Média} & \textbf{Desvio Padrão} & \textbf{Máximo} & \textbf{Mediana} & \textbf{Mínimo} \\
+        \midrule
+        Reativo & -978,5 & 238,32 & -62 & -1031,5 & -1103 \\
+        Modelo & -294,9 & 1263,43 & 2876 & -1087,0 & -1113 \\
+        Garimpeiro & -602,1 & 1117,57 & 1862 & -1092,0 & -1111 \\
+        Caçador & 15,5 & 1487,29 & 1963 & -1091,0 & -1125 \\
+        Evolutivo & -735,53 & 779,57 & 1979 & -1012,5 & -1098 \\
+        \bottomrule
     \end{tabular}
-    \\{\small Fonte: Elaborado pelo autor.}
+    \caption{Estatísticas descritivas das pontuações (30 execuções por agente).}
+    \label{tab:estatisticas}
 \end{table}
 
-Conforme evidenciado na Tabela 2, as funcionalidades relacionadas ao gerenciamento de usuários, à criação de mundos e agentes, à visualização do histórico, ao armazenamento de resultados e às operações de importação e exportação apresentaram comportamento funcional durante os testes. Por outro lado, as funcionalidades associadas ao comportamento dos agentes, à execução das simulações e à geração de estatísticas foram classificadas como "ajustes planejados", indicando que esses componentes ainda demandam aprimoramentos no protótipo.
+Os resultados revelam diferenças substanciais entre as estratégias. O \textbf{agente reativo} apresenta o pior desempenho (média $-978,5$), confirmando a ineficácia de decisões puramente aleatórias. O \textbf{agente baseado em modelo padrão} obtém média intermediária ($-294,9$), mas com alta variabilidade (desvio padrão de 1263,43), indicando sucessos esporádicos (máximo de 2876) em meio a muitas falhas (mediana $-1087$).
 
-\subsection{Cenário Demonstrativo}
+O \textbf{agente Caçador} alcançou a melhor média ($15,5$), sugerindo que, neste cenário, a eliminação do Wumpus é uma estratégia particularmente eficaz. Contudo, seu elevado desvio padrão (1487,29) decorre do perfil \textit{Corajoso}, que, ao incentivar a exploração de salas perigosas mesmo após atingir objetivos parciais, gora execuções bem-sucedidas com mortes tardias, penalizando a pontuação final. O \textbf{Garimpeiro} apresentou desempenho inferior ao modelo padrão (média $-602,1$), possivelmente porque a priorização do ouro o expõe a riscos desnecessários neste ambiente.
 
-Para complementar a avaliação funcional, foi considerado um cenário demonstrativo que representa o fluxo completo de utilização da plataforma. Nesse cenário, o usuário inicia sua interação realizando o cadastro e a autenticação no sistema. Após o acesso, ele cria um mundo do Wumpus e configura um agente para atuar nesse ambiente, permitindo verificar a integração entre os recursos de gerenciamento de usuários, ambientes e agentes. Em seguida, o usuário executa uma simulação e acompanha o comportamento do agente durante sua interação com o mundo. Após a execução, são consultadas as estatísticas disponibilizadas pela plataforma para avaliar as informações produzidas durante a simulação. Os resultados obtidos são então armazenados no sistema e podem ser posteriormente recuperados por meio do histórico de execuções. Por fim, o cenário contempla a exportação dos dados do ambiente em formato JSON, seguida da importação do arquivo gerado, o que permite verificar se as informações exportadas podem ser utilizadas para reconstruir o mapa na plataforma. Dessa forma, o cenário demonstrativo reúne diferentes funcionalidades do sistema em um único fluxo, evidenciando a integração entre os módulos envolvidos.
+O \textbf{agente evolutivo}, apesar do custo computacional mais elevado, apresentou a segunda melhor mediana ($-1012,5$), superando o modelo padrão e o garimpeiro. Sua média de $-735,53$ e desvio padrão de 779,57 indicam maior consistência, com menos execuções extremamente negativas. A pontuação máxima de 1979 demonstra que o algoritmo genético é capaz de encontrar soluções de alta qualidade, embora ainda haja espaço para melhorias na robustez.
 
-\subsection{Discussão dos Resultados}
+\subsection{Discussão}
 
-Os testes funcionais realizados demonstraram que a plataforma Wumpus Verse apresenta funcionamento adequado em suas principais funcionalidades de gerenciamento e persistência. Os recursos de cadastro e autenticação de usuários, criação de mundos e agentes, visualização do histórico, armazenamento de resultados e importação/exportação de cenários comportaram‑se conforme o esperado. A criação de agentes também se mostrou operacional, embora os mecanismos de personalização ainda estejam em processo de refinamento, uma vez que algumas opções de configuração necessitam de ajustes para oferecer maior flexibilidade e uma melhor experiência de utilização. Essa limitação está relacionada principalmente à necessidade de ampliar as possibilidades de configuração dos agentes disponibilizadas pela plataforma.
+Os experimentos demonstram que a plataforma Wumpus Verse é capaz de produzir resultados comparativos reproduzíveis entre diferentes agentes, fornecendo métricas objetivas (pontuação, passos, sobrevivência) que permitem avaliar o impacto de distintas estratégias de decisão. A flexibilidade na configuração de agentes e ambientes, aliada à persistência e exportação de dados, torna a ferramenta adequada para pesquisas que demandam experimentação sistemática e \textit{benchmarking} em cenários variados.
 
-No que diz respeito à execução das simulações, o comportamento observado nos cenários avaliados foi considerado satisfatório, mas a tomada de decisão dos agentes e a integração com serviços externos ainda requerem aprimoramentos. Em particular, a utilização de uma API externa em sua versão gratuita pode introduzir limitações de desempenho e ocasionar eventuais inconsistências durante determinadas execuções. Outro aspecto identificado está relacionado ao módulo de estatísticas e análise dos resultados: atualmente, a plataforma disponibiliza informações básicas sobre as execuções realizadas, mas a quantidade de métricas ainda pode ser ampliada para proporcionar uma análise mais detalhada do desempenho dos agentes em diferentes cenários.
-
-De modo geral, os resultados obtidos indicam que o protótipo atende às principais funcionalidades propostas, especialmente aquelas voltadas ao gerenciamento dos ambientes, agentes e resultados experimentais. Ao mesmo tempo, os testes permitiram identificar funcionalidades que ainda necessitam de evolução, fornecendo uma base sólida para o direcionamento dos trabalhos futuros. Entre os principais aprimoramentos planejados, destacam‑se a ampliação das opções de personalização dos agentes, o aumento da robustez da integração com serviços externos, o aperfeiçoamento dos mecanismos de tomada de decisão e a disponibilização de métricas mais detalhadas para a análise de desempenho no ambiente do Mundo do Wumpus.
-
-
-
+Os testes funcionais, embora não detalhados neste artigo, validam a robustez da implementação para as operações de criação, execução e gerenciamento, enquanto os resultados quantitativos evidenciam a utilidade da plataforma para análises comparativas. Como trabalhos futuros, planeja-se ampliar o conjunto de métricas, suportar experimentos em lote e integrar novos tipos de agentes, consolidando o Wumpus Verse como um ambiente de referência para a comunidade de IA.
